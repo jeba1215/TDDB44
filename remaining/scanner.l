@@ -25,7 +25,7 @@ extern YYLTYPE yylloc; // Used for position information, see below.
 %x c_comment
 STRING '.*['']?.*'
 INTEGER [0-9]+
-FLOAT {INTEGER}*[\.eE]?{INTEGER}+
+FLOAT ({INTEGER}+[\.eE]?|\.){INTEGER}+
 ID [a-z][a-z0-9]*
 
 /* Position information is entered into the yylloc variable, so we will be
