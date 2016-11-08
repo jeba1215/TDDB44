@@ -6,7 +6,7 @@
 
 #include "scanner.hh"
 // This is where you put #include directives as needed for later labs.
-// include "ast.hh", parser.hh" in that order
+// include "ast.hh", "parser.hh" in that order
 
 int column = 0;
 
@@ -23,9 +23,10 @@ extern YYLTYPE yylloc; // Used for position information, see below.
 /* If you want to include any flex declarations, this is where to do it. */
 
 %x c_comment
-DIGIT [0-9]
-/* {DIGIT}+"."{DIGIT}*
- ID [a-z][a-z0-9]* */
+STRING '.*['']?.*'
+INTEGER [0-9]+
+FLOAT {INTEGER}*[\.eE]?{INTEGER}+
+ID [a-z][a-z0-9]*
 
 /* Position information is entered into the yylloc variable, so we will be
    able to generate good error messages later in later phases. */
@@ -34,6 +35,18 @@ DIGIT [0-9]
    identifiers, integers, reals, and whitespace. */
 %%
 
+{STRING} {
+    printf("string");
+}
+{INTEGER} {
+    printf("INTEGER");
+}
+{FLOAT} {
+    printf("FLOAT");
+}
+{ID} {
+    printf("ID");
+}
 \.                       {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;

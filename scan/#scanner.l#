@@ -1,0 +1,28 @@
+%{
+#include <iostream>
+#include <stdlib.h>
+#include <string.h>
+
+#include "scanner.hh"
+using namespace std;
+%}
+
+DIGIT   [0-9]
+DIGIT1  [1-9]
+
+/* read only one input file */
+%option noyywrap
+
+%%
+"+"               { cout << "operator <" << yytext[0] << ">" << endl; }
+"-"               { cout << "operator <" << yytext[0] << ">" << endl; }
+"="               { cout << "operator <" << yytext[0] << ">" << endl; }
+{DIGIT1}{DIGIT}*  { cout << "  number <" << yytext    << ">" << endl; }
+.                 { cout << " UNKNOWN <" << yytext[0] << ">" << endl; }
+%%
+
+int main(int argc, char** argv)
+{
+    yylex();
+    return 0;
+}
