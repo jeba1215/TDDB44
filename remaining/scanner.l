@@ -36,16 +36,16 @@ ID [a-z][a-z0-9]*
 %%
 
 {STRING} {
-    printf("string");
+    printf("string\n");
 }
 {INTEGER} {
-    printf("INTEGER");
+    printf("INTEGER\n");
 }
 {FLOAT} {
-    printf("FLOAT");
+    printf("FLOAT\n");
 }
 {ID} {
-    printf("ID");
+    printf("ID\n");
 }
 \.                       {
                             yylloc.first_line = yylineno;

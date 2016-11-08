@@ -894,28 +894,28 @@ case 1:
 YY_RULE_SETUP
 #line 38 "scanner.l"
 {
-    printf("string");
+    printf("string\n");
 }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 41 "scanner.l"
 {
-    printf("INTEGER");
+    printf("INTEGER\n");
 }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 44 "scanner.l"
 {
-    printf("FLOAT");
+    printf("FLOAT\n");
 }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 47 "scanner.l"
 {
-    printf("ID");
+    printf("ID\n");
 }
 	YY_BREAK
 case 5:
