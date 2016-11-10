@@ -26,13 +26,13 @@ extern YYLTYPE yylloc; // Used for position information, see below.
 
 COMMENTOLD (\/\*[\s\S]*\*\/|\{[\s\S]*\}|\/\/.*)
 COMMENT \{[\s\S]*\}
-STRING '.*['']?.*'
+STRING '((['']*|[^'\n]*)*|[^'\n]*)'
 INTEGER [0-9]+
 WS [ \t]
 NL [\n\r]
-REAL ({INTEGER}[\.eE][+-]?{INTEGER}([eE][+-]?{INTEGER})?|\.{INTEGER}[eE][+-]?{INTEGER}|{INTEGER}\.[0-9]*[eE]?{INTEGER}|{INTEGER}\.[eE][+-]?{INTEGER}|\.{INTEGER}|{INTEGER}\.|[0-9]*\.{INTEGER}[eE])
+REAL ({INTEGER}\.([eE]{INTEGER})?|[0-9]*\.?{INTEGER}([eE][-+]?{INTEGER})?)
 ID [a-z][a-z0-9]*
-
+STRINGNL ('.*['']?.*[^'][\n])
 
 /* Position information is entered into the yylloc variable, so we will be
    able to generate good error messages later in later phases. */
@@ -352,6 +352,9 @@ procedure                {
     column += yyleng;
     yylval.pool_p = sym_tab->pool_install(sym_tab->capitalize(yytext));
     return T_IDENT;
+}
+{STRINGNL} {
+    yyerror("Newline in string");    
 }
  
 
