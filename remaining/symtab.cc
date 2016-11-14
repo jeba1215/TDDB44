@@ -533,9 +533,8 @@ void symbol_table::open_scope()
 {
     cout << "open_scope()" << endl;
     /* Your code here */
-    if(sym_pos >= MAX_BLOCK) fatal("MAX_BLOCK IS FULL!");
-    block_table[current_level] = sym_pos;
-    current_level += 1;
+    if(sym_pos >= MAX_SYM) fatal("MAX_BLOCK IS FULL!");
+    block_table[current_level++] = sym_pos;
 }
 
 
@@ -544,8 +543,8 @@ sym_index symbol_table::close_scope()
 {
     cout << "close_scope()" << endl;
     /* Your code here */
-    block_table[current_level] = sym_pos;
-    current_level -= 1;    
+    
+    block_table[current_level--] = sym_pos;    
 
     for(int i = block_table[current_level]; i < block_table[current_level+1]; i++){
         for(int j = 0; j < MAX_HASH; j++){
@@ -670,11 +669,11 @@ void symbol_table::set_symbol_type(const sym_index sym_p,
 sym_index symbol_table::install_symbol(const pool_index pool_p,
                                        const sym_type tag)
 {
-    cout << "install_symbol()" << endl;
+    cout << "install_symbol() -> " << pool_lookup(pool_p) << endl;
     /* Your code here */
     sym_index i = hash_table[hash(pool_p)];
     symbol* symtemp = get_symbol(i);
-    if(i != -1){
+    if(i != NULL_SYM){
         while(symtemp->level == current_level){
             if(symtemp->id == pool_p){
                 return i;
@@ -716,7 +715,6 @@ sym_index symbol_table::install_symbol(const pool_index pool_p,
         new_sym = new symbol(pool_p);
         break;
     }
-    cout << "install_symbol()2" << endl;
     //set the rest of the values
     
     new_sym->hash_link = hash_table[hash(pool_p)];
@@ -724,10 +722,8 @@ sym_index symbol_table::install_symbol(const pool_index pool_p,
     //new_sym->offset;
     //new_sym->back_link;
 
-    cout << "install_symbol()3" << endl;
     hash_table[hash(pool_p)] = sym_pos;
     sym_table[sym_pos] = new_sym;
-    cout << "install_symbol()4" << endl;
     return sym_pos;
 }
 
@@ -970,7 +966,7 @@ sym_index symbol_table::enter_function(position_information *pos, const pool_ind
 /* Enter a procedure_symbol into the symbol table. */
 sym_index symbol_table::enter_procedure(position_information *pos, const pool_index pool_p)
 {
-    cout << "enter_procedure()" << endl;
+    cout << "enter_procedure() -> " << pool_lookup(pool_p) << endl;
     /* Your code here */
     sym_index sym_p = install_symbol(pool_p, SYM_PROC);
     procedure_symbol *proc = sym_table[sym_p]->get_procedure_symbol();
