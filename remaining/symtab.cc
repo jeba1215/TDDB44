@@ -531,15 +531,32 @@ sym_index symbol_table::current_environment()
 /* Increase the current_level by one. */
 void symbol_table::open_scope()
 {
+    cout << "open_scope()" << endl;
     /* Your code here */
+    if(sym_pos >= MAX_BLOCK) fatal("MAX_BLOCK IS FULL!");
+    block_table[current_level] = sym_pos;
+    current_level += 1;
 }
 
 
 /* Decrease the current_level by one. Return sym_index to new environment. */
 sym_index symbol_table::close_scope()
 {
+    cout << "close_scope()" << endl;
     /* Your code here */
-    return NULL_SYM;
+    block_table[current_level] = sym_pos;
+    current_level -= 1;    
+
+    for(int i = block_table[current_level]; i < block_table[current_level+1]; i++){
+        for(int j = 0; j < MAX_HASH; j++){
+            if(sym_table[i] == sym_table[hash_table[j]]){
+                //If hash table is pointing to symbol
+                hash_table[j] = sym_table[i]->hash_link;
+            }
+        }
+    }
+
+    return current_environment();
 }
 
 
@@ -550,8 +567,21 @@ sym_index symbol_table::close_scope()
    follows hash links outwards. */
 sym_index symbol_table::lookup_symbol(const pool_index pool_p)
 {
-    /* Your code here */
-    return NULL_SYM;
+    cout << "lookup_symbol()" << endl;
+    /* Your code her */
+
+    sym_index i = hash_table[hash(pool_p)];
+    while(get_symbol(i) != NULL)
+    {
+        if(get_symbol(i)->id != pool_p)
+        {
+            i = get_symbol(i)->hash_link;            
+        } else {
+            return i;
+        }
+    }
+
+    return 0;
 }
 
 
@@ -640,8 +670,65 @@ void symbol_table::set_symbol_type(const sym_index sym_p,
 sym_index symbol_table::install_symbol(const pool_index pool_p,
                                        const sym_type tag)
 {
+    cout << "install_symbol()" << endl;
     /* Your code here */
-    return 0; // Return index to the symbol we just created.
+    sym_index i = hash_table[hash(pool_p)];
+    symbol* symtemp = get_symbol(i);
+    if(i != -1){
+        while(symtemp->level == current_level){
+            if(symtemp->id == pool_p){
+                return i;
+            }else{
+                i = symtemp->hash_link;
+                symtemp = get_symbol(i);
+            }        
+        }
+    }
+    //install symbol and return index
+    if(sym_pos >= MAX_SYM) fatal("MAX_SYM IS FULL!");
+    if(sym_pos >= MAX_HASH) fatal("MAX_HASH IS FULL!");
+    sym_pos += 1;
+
+    symbol* new_sym;
+    switch (tag){
+        case SYM_ARRAY:
+        new_sym = new array_symbol(pool_p);
+        break;
+        case SYM_FUNC:
+        new_sym = new function_symbol(pool_p);
+        break;
+        case SYM_PROC:
+        new_sym = new procedure_symbol(pool_p);
+        break;
+        case SYM_VAR:
+        new_sym = new variable_symbol(pool_p);
+        break;
+        case SYM_PARAM:
+        new_sym = new parameter_symbol(pool_p);
+        break;
+        case SYM_CONST:
+        new_sym = new constant_symbol(pool_p);
+        break;
+        case SYM_NAMETYPE:
+        new_sym = new nametype_symbol(pool_p);
+        break;
+        case SYM_UNDEF:
+        new_sym = new symbol(pool_p);
+        break;
+    }
+    cout << "install_symbol()2" << endl;
+    //set the rest of the values
+    
+    new_sym->hash_link = hash_table[hash(pool_p)];
+    new_sym->level = current_level;
+    //new_sym->offset;
+    //new_sym->back_link;
+
+    cout << "install_symbol()3" << endl;
+    hash_table[hash(pool_p)] = sym_pos;
+    sym_table[sym_pos] = new_sym;
+    cout << "install_symbol()4" << endl;
+    return sym_pos;
 }
 
 /* Enter a constant into the symbol table. The value is an integer. The type
@@ -848,8 +935,7 @@ sym_index symbol_table::enter_array(position_information *pos,
 
 
 /* Enter a function_symbol into the symbol table. */
-sym_index symbol_table::enter_function(position_information *pos,
-                                       const pool_index pool_p)
+sym_index symbol_table::enter_function(position_information *pos, const pool_index pool_p)
 {
     // Install a function_symbol in the symbol table.
     // The function type will be set i labb3, the parser, because
@@ -882,11 +968,31 @@ sym_index symbol_table::enter_function(position_information *pos,
 
 
 /* Enter a procedure_symbol into the symbol table. */
-sym_index symbol_table::enter_procedure(position_information *pos,
-                                        const pool_index pool_p)
+sym_index symbol_table::enter_procedure(position_information *pos, const pool_index pool_p)
 {
+    cout << "enter_procedure()" << endl;
     /* Your code here */
-    return NULL_SYM;
+    sym_index sym_p = install_symbol(pool_p, SYM_PROC);
+    procedure_symbol *proc = sym_table[sym_p]->get_procedure_symbol();
+
+    // Make sure it's not already been declared.
+    if (proc->tag != SYM_UNDEF) {
+        type_error(pos) << "Redeclaration: " << proc << endl;
+        return sym_p; // returns the original symbol
+    }
+
+    // Set up the function-specific fields.
+    proc->tag = SYM_PROC;
+    // Parameters are added later on.
+    proc->last_parameter = NULL;
+
+    // This will grow as local variables and temporaries are added.
+    proc->ar_size = 0;
+    proc->label_nr = get_next_label();
+
+    sym_table[sym_p] = proc;
+
+    return sym_p;
 }
 
 
