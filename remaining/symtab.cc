@@ -543,17 +543,19 @@ sym_index symbol_table::close_scope()
 {
     cout << "close_scope()" << endl;
     /* Your code here */
-    
-    block_table[current_level--] = sym_pos;    
+    /*
+        Gör om denna, iterera från botten av sym_table och över alla "lokala"
+        variabler. Hasha sym->id och routa om hash_table
+    */
 
-    for(int i = block_table[current_level]; i < block_table[current_level+1]; i++){
-        for(int j = 0; j < MAX_HASH; j++){
-            if(sym_table[i] == sym_table[hash_table[j]]){
-                //If hash table is pointing to symbol
-                hash_table[j] = sym_table[i]->hash_link;
-            }
+    for(int i = sym_pos; get_symbol(i)->level!=current_level; i--){
+        if( get_symbol(hash_table[hash(get_symbol(i)->id)]) == get_symbol(i) ){
+            hash_table[hash(get_symbol(i)->id)] = get_symbol(i)->hash_link;
+            get_symbol(i)->hash_link = -1;
         }
     }
+    
+    block_table[--current_level] = sym_pos;
 
     return current_environment();
 }
