@@ -38,7 +38,7 @@ symbol_table::symbol_table()
      // Always points to the last position in the string pool
     pool_pos = 0;
     // Set base size of string pool. Can be extended later on,
-    // if there are many symbols to scan.
+    // if therev  are many symbols to scan.
     pool_length = BASE_POOL_SIZE;
 
     // create a string with length of pool_length
@@ -534,7 +534,8 @@ void symbol_table::open_scope()
 {
     /* Your code here */
     if(sym_pos >= MAX_SYM) fatal("MAX_BLOCK IS FULL!");
-    block_table[current_level++] = sym_pos;
+    current_level++;
+    block_table[current_level] = sym_pos;
 }
 
 
@@ -542,19 +543,20 @@ void symbol_table::open_scope()
 sym_index symbol_table::close_scope()
 {
     /* Your code here */
+    int i = 0;
 
-    for(int i = block_table[current_level-1]+1; get_symbol(i)->level == current_level; i++){
+    for(i = sym_pos; get_symbol(i)->level >= current_level; i--){
         symbol* symtemp = get_symbol(i);
-        if( get_symbol(hash_table[hash(symtemp->id)]) == symtemp ){
-            hash_table[hash(symtemp->id)] = symtemp->hash_link;
+        if( get_symbol(hash_table[symtemp->back_link]) == symtemp ){
+            hash_table[symtemp->back_link] = symtemp->hash_link;
             symtemp->hash_link = -1;
         }
 
-        if(get_symbol(i+1) == NULL) break;
+        if(get_symbol(i-1) == NULL) break;
+        
     }
     
-    current_level--;
-    block_table[current_level] = sym_pos;
+    --current_level;
 
     return current_level;
 }
@@ -570,15 +572,15 @@ sym_index symbol_table::lookup_symbol(const pool_index pool_p)
     sym_index i = hash_table[hash(pool_p)];
     while(get_symbol(i) != NULL)
     {
-        if(get_symbol(i)->id != pool_p)
+        if(pool_compare(get_symbol(i)->id, pool_p))
         {
-            i = get_symbol(i)->hash_link;            
-        } else {
             return i;
+        } else {
+            i = get_symbol(i)->hash_link;  
         }
     }
 
-    return 0;
+    return NULL_SYM;
 }
 
 
@@ -667,9 +669,18 @@ void symbol_table::set_symbol_type(const sym_index sym_p,
 sym_index symbol_table::install_symbol(const pool_index pool_p, const sym_type tag)
 {
     /* Your code here */
-    sym_index i = hash_table[hash(pool_p)];
-    symbol* symtemp = get_symbol(i);
+    //sym_index i = hash_table[hash(pool_p)];
+    //symbol* symtemp = get_symbol(i);
+    sym_index i = lookup_symbol(pool_p);
+    //check if already exists
+    if(i != NULL_SYM){
+        //check if on the same level
+        if(get_symbol(i)->level == current_level){
+            return i;
+        }
+    }
 
+    /*
     if(i != NULL_SYM){
         while(symtemp->level == current_level){
             if( pool_compare(symtemp->id, pool_p) ){
@@ -682,12 +693,15 @@ sym_index symbol_table::install_symbol(const pool_index pool_p, const sym_type t
             }
         }
     }
+    */
+
+
 
     //install symbol and return index
     if(sym_pos >= MAX_SYM) fatal("MAX_SYM IS FULL!");
     if(sym_pos >= MAX_HASH) fatal("MAX_HASH IS FULL!");
+    
     sym_pos += 1;
-
     symbol* new_sym;
     switch (tag){
         case SYM_ARRAY:
@@ -720,7 +734,7 @@ sym_index symbol_table::install_symbol(const pool_index pool_p, const sym_type t
     new_sym->hash_link = hash_table[hash(pool_p)];
     new_sym->level = current_level;
     new_sym->offset = 0;
-    new_sym->back_link = -1;
+    new_sym->back_link = hash(pool_p);
 
     hash_table[hash(pool_p)] = sym_pos;
     sym_table[sym_pos] = new_sym;

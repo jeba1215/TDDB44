@@ -5,6 +5,8 @@
 
 
 #include "scanner.hh"
+
+
 #include "symtab.hh"
 // This is where you put #include directives as needed for later labs.
 // include "ast.hh", "parser.hh" in that order
@@ -25,15 +27,13 @@ extern YYLTYPE yylloc; // Used for position information, see below.
 
 %x c_comment comment
 
-COMMENTOLD (\/\*[\s\S]*\*\/|\{[\s\S]*\}|\/\/.*)
-COMMENT \{[\s\S]*\}
-STRING '((['']*|[^'\n]*)*|[^'\n]*)'
+STRING '(('')|[^'\n])*'
 INTEGER [0-9]+
 WS [ \t]
 NL [\n\r]
 REAL ({INTEGER}\.([eE]{INTEGER})?|[0-9]*\.?{INTEGER}([eE][-+]?{INTEGER})?)
 ID [a-z][a-z0-9]*
-STRINGNL ('.*['']?.*[^'][\n])
+STRINGNL '(('')|[^'\n])*\n
 
 /* Position information is entered into the yylloc variable, so we will be
    able to generate good error messages later in later phases. */
@@ -158,12 +158,14 @@ if                       {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
                             column += yyleng;
+                            yymore();
                             return T_IF;  
                          }
 do                       {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
                             column += yyleng;
+                            yymore();
                             return T_DO;  
                          }
 or                       {
@@ -355,9 +357,8 @@ procedure                {
     return T_IDENT;
 }
 {STRINGNL} {
-    yyerror("Newline in string");    
+    yyerror("Newline in string");
 }
- 
 
 <<EOF>>                  yyterminate();
 .                        yyerror("Illegal character");

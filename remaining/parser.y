@@ -203,6 +203,7 @@ const_decl      : T_IDENT T_EQ integer T_SEMICOLON
                 | T_IDENT T_EQ real T_SEMICOLON
                 {
                     /* Your code here */
+
                 }
                 | T_IDENT T_EQ T_STRINGCONST T_SEMICOLON
                 {
@@ -683,26 +684,38 @@ simple_expr     : term
 term            : factor
                 {
                     /* Your code here */
+                    $$ = $1;
                 }
                 | term T_AND factor
                 {
                     /* Your code here */
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    $$ = new ast_and(pos, $1, $3);
                 }
                 | term T_MUL factor
                 {
                     /* Your code here */
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    $$ = new ast_mult(pos, $1, $3);
                 }
                 | term T_RDIV factor
                 {
                     /* Your code here */
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    $$ = new ast_rdiv(pos, $1, $3);
+
                 }
                 | term T_IDIV factor
                 {
                     /* Your code here */
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    $$ = new ast_idiv(pos, $1, $3);
                 }
                 | term T_MOD factor
                 {
                     /* Your code here */
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    $$ = new ast_mod(pos, $1, $3);
                 }
                 ;
 
@@ -726,10 +739,12 @@ factor          : rvariable
                 | T_NOT factor
                 {
                     /* Your code here */
+                    $$ = $2;
                 }
                 | T_LEFTPAR expr T_RIGHTPAR
                 {
                     /* Your code here */
+                    $$ = $2;
                 }
                 
                 ;
