@@ -123,7 +123,6 @@ extern bool assembler;
 
 program         : prog_decl subprog_part comp_stmt T_DOT
                 {
-
                     symbol *env = sym_tab->get_symbol($1->sym_p);
 
                     // The status variables here depend on what flags were
@@ -165,7 +164,7 @@ program         : prog_decl subprog_part comp_stmt T_DOT
                     }
 
                     // We close the global scope.
-                    sym_tab->close_scope();
+                    sym_tab->close_scope();                    
                 }
                 ;
 
@@ -179,7 +178,10 @@ prog_decl       : prog_head T_SEMICOLON const_part variable_part
 
 prog_head       : T_PROGRAM T_IDENT
                 {
-                    /* Your code here */
+                    /* Your code here */               
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    sym_tab->enter_procedure(pos, $2);
+                    $$ = new ast_procedurehead(pos, $2);
                     sym_tab->open_scope();
                 }
                 ;
@@ -199,10 +201,14 @@ const_decls     : const_decl
 const_decl      : T_IDENT T_EQ integer T_SEMICOLON
                 {
                     /* Your code here */
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    sym_tab->enter_constant(pos, $1, integer_type, $3->value);
                 }
                 | T_IDENT T_EQ real T_SEMICOLON
                 {
                     /* Your code here */
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    sym_tab->enter_constant(pos, $1, real_type, $3->value);
 
                 }
                 | T_IDENT T_EQ T_STRINGCONST T_SEMICOLON
@@ -218,6 +224,10 @@ const_decl      : T_IDENT T_EQ integer T_SEMICOLON
                     // constant bar = foo;
                     // ...now, why would anyone want to do that?
                     /* Your code here */
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    symbol *tmp = sym_tab->get_symbol($3->sym_p);
+                    constant_symbol *con = tmp->get_constant_symbol();
+                    sym_tab->enter_constant(pos, $1, $3->sym_p, con->const_value.ival);
                 }
                 
                 ;
@@ -236,12 +246,14 @@ var_decls       : var_decl
 var_decl        : T_IDENT T_COLON type_id T_SEMICOLON
                 {
                     /* Your code here */
-                    sym_tab->install_symbol($1, sym_tab->get_symbol_tag($3->sym_p));
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    sym_tab->enter_variable(pos, $1, $3->sym_p);
                 }
                 | T_IDENT T_COLON T_ARRAY T_LEFTBRACKET integer T_RIGHTBRACKET T_OF type_id T_SEMICOLON
                 {
                     /* Your code here */
-                    sym_tab->install_symbol($1, sym_tab->get_symbol_tag($8->sym_p));
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);           
+                    sym_tab->enter_array(pos, $1, $8->sym_p, $5->value);
                 }
                 | T_IDENT T_COLON T_ARRAY T_LEFTBRACKET const_id T_RIGHTBRACKET T_OF type_id T_SEMICOLON
                 {
@@ -307,7 +319,7 @@ subprog_decls   : subprog_decl
 
 subprog_decl    : proc_decl subprog_part comp_stmt T_SEMICOLON
                 {
-
+                    cout << "subprog_decl" << endl;
                     symbol *env = sym_tab->get_symbol($1->sym_p);
 
                     if (typecheck) {
