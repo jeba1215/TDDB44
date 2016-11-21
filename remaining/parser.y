@@ -188,7 +188,7 @@ prog_head       : T_PROGRAM T_IDENT
 
 
 const_part      : T_CONST const_decls
-                | error const_decls
+                | error const_decls 
                 | /* empty */
                 ;
 
@@ -229,7 +229,12 @@ const_decl      : T_IDENT T_EQ integer T_SEMICOLON
                     constant_symbol *con = tmp->get_constant_symbol();
                     sym_tab->enter_constant(pos, $1, $3->sym_p, con->const_value.ival);
                 }
-                
+                | T_IDENT T_EQ const_id error
+                {
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    error(pos) << "missing ';'\n";
+                    yyerrok;
+                }
                 ;
 
 
@@ -425,6 +430,7 @@ proc_decl       : proc_head opt_param_list T_SEMICOLON const_part variable_part
 func_decl       : func_head opt_param_list T_COLON type_id T_SEMICOLON const_part variable_part
                 {
                     /* Your code here */
+                    sym_tab->get_symbol($1->sym_p)->type = $4->sym_p;
                     $$ = $1;
                 }
                 ;
@@ -481,11 +487,23 @@ opt_param_list  : T_LEFTPAR param_list T_RIGHTPAR
                 {
                     $$ = NULL;
                 }
+                | T_LEFTPAR param_list error
+                {
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    error(pos) << "missing ')'\n";
+                    yyerrok;
+                }                       
+                | error param_list T_RIGHTPAR
+                {
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    error(pos) << "missing '('\n";
+                    yyerrok;
+                }
                 | /* empty */
                 {
                     /* Your code here */
                     $$ = NULL;
-                }
+                }                
                 ;
 
 
@@ -530,16 +548,24 @@ comp_stmt       : T_BEGIN stmt_list T_END
 
 stmt_list       : stmt
                 {
-                    /* Your code here */
                     position_information *pos = new position_information(@1.first_line, @1.first_column);
-                    $$ = new ast_stmt_list(pos, $1);
+                    /* Your code here */
+                    if($1 == NULL){
+                        $$ = NULL;
+                    } else {
+                        $$ = new ast_stmt_list(pos, $1);
+                    }                    
+                    
                 }
                 | stmt_list T_SEMICOLON stmt
                 {
                     /* Your code here */           
-                    //cout << "stmt_list 2 " << $3 << endl;
-                    position_information *pos = new position_information(@1.first_line, @1.first_column);
-                    $$ = new ast_stmt_list(pos, $3, $1);
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);                    
+                    if($3 == NULL){
+                        $$ = $1;
+                    } else {
+                        $$ = new ast_stmt_list(pos, $3, $1);
+                    }
                 }
                 ;
 
@@ -581,11 +607,15 @@ stmt            : T_IF expr T_THEN stmt_list elsif_list else_part T_END
                     position_information *pos = new position_information(@1.first_line, @1.first_column);
                     $$ = new ast_return(pos);
                 }
-                
+                | error
+                {
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    error(pos) << "statement error\n";
+                    yyerrok;
+                }
                 | /* empty */
                 {
-                    /* Your code here */
-                    //$$ = NULL;
+                    $$ = NULL;
                 }
                 ;
 
@@ -617,7 +647,18 @@ rvariable       : rvar_id
                     position_information *pos = new position_information(@1.first_line, @1.first_column);
                     $$ = new ast_indexed(pos, $1, $3);
                 }
-                
+                | array_id error expr T_RIGHTBRACKET
+                {
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    error(pos) << "missing '['\n";
+                    yyerrok;
+                }
+                | array_id T_LEFTBRACKET expr error
+                {
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    error(pos) << "missing ']'\n";
+                    yyerrok;
+                }
                 ;
 
 
@@ -820,7 +861,13 @@ factor          : rvariable
                     /* Your code here */
                     $$ = $2;
                 }
-                
+                | T_LEFTPAR expr error
+                {
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);                    
+                    error(pos) << "missing ')'\n";
+                    yyerrok;
+                }
+
                 ;
 
 
@@ -828,10 +875,14 @@ func_call       : func_id T_LEFTPAR opt_expr_list T_RIGHTPAR
                 {
                     /* Your code here */
                     position_information *pos = new position_information(@1.first_line, @1.first_column);
-                    $$ = new ast_functioncall(pos, $1, $3);                
+                    $$ = new ast_functioncall(pos, $1, $3);
                 }
-                |
-                
+                | func_id T_LEFTPAR opt_expr_list error
+                {
+                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    error(pos) << "missing ')'\n";
+                    yyerrok;
+                }
                 ;
 
 
@@ -937,7 +988,7 @@ proc_id         : id
 func_id         : id
                 {
                     // Make sure this id is really declared as a function.
-                    // debug() << "func_id -> id: " << $1->sym_p << endl;
+                    //debug() << "func_id -> id: " << $1->sym_p << endl;
                     if (sym_tab->get_symbol_tag($1->sym_p) != SYM_FUNC) {
                         type_error($1->pos) << "not declared "
                                             << "as function: "
