@@ -178,7 +178,7 @@ prog_decl       : prog_head T_SEMICOLON const_part variable_part
 
 prog_head       : T_PROGRAM T_IDENT
                 {
-                    /* Your code here */               
+                    /* Your code here */         
                     position_information *pos = new position_information(@1.first_line, @1.first_column);
                     sym_tab->enter_procedure(pos, $2);
                     $$ = new ast_procedurehead(pos, $2);
@@ -319,7 +319,6 @@ subprog_decls   : subprog_decl
 
 subprog_decl    : proc_decl subprog_part comp_stmt T_SEMICOLON
                 {
-                    cout << "subprog_decl" << endl;
                     symbol *env = sym_tab->get_symbol($1->sym_p);
 
                     if (typecheck) {
@@ -522,6 +521,8 @@ param           : T_IDENT T_COLON type_id
 comp_stmt       : T_BEGIN stmt_list T_END
                 {
                     /* Your code here */
+                    //cout << "comp_stmnt - " << $2 << endl;
+                    //cout << $2 << endl;
                     $$ = $2;
                 }
                 ;
@@ -535,9 +536,10 @@ stmt_list       : stmt
                 }
                 | stmt_list T_SEMICOLON stmt
                 {
-                    /* Your code here */                
+                    /* Your code here */           
+                    //cout << "stmt_list 2 " << $3 << endl;
                     position_information *pos = new position_information(@1.first_line, @1.first_column);
-                    $$ = new ast_stmt_list(pos, $3);
+                    $$ = new ast_stmt_list(pos, $3, $1);
                 }
                 ;
 
@@ -569,6 +571,7 @@ stmt            : T_IF expr T_THEN stmt_list elsif_list else_part T_END
                 | T_RETURN expr
                 {
                     /* Your code here */
+                    //cout << "T_RETURN - " << $2 << endl;
                     position_information *pos = new position_information(@1.first_line, @1.first_column);
                     $$ = new ast_return(pos, $2);
                 }
@@ -582,7 +585,7 @@ stmt            : T_IF expr T_THEN stmt_list elsif_list else_part T_END
                 | /* empty */
                 {
                     /* Your code here */
-                    $$ = NULL;
+                    //$$ = NULL;
                 }
                 ;
 
