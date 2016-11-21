@@ -227,7 +227,11 @@ const_decl      : T_IDENT T_EQ integer T_SEMICOLON
                     position_information *pos = new position_information(@1.first_line, @1.first_column);
                     symbol *tmp = sym_tab->get_symbol($3->sym_p);
                     constant_symbol *con = tmp->get_constant_symbol();
-                    sym_tab->enter_constant(pos, $1, $3->sym_p, con->const_value.ival);
+                    if(con->type == real_type){
+                            sym_tab->enter_constant(pos, $1, $3->sym_p, con->const_value.rval);
+                        } else {
+                            sym_tab->enter_constant(pos, $1, $3->sym_p, con->const_value.ival);
+                        }                    
                 }
                 | T_IDENT T_EQ const_id error
                 {
@@ -882,7 +886,7 @@ func_call       : func_id T_LEFTPAR opt_expr_list T_RIGHTPAR
                     position_information *pos = new position_information(@1.first_line, @1.first_column);
                     error(pos) << "missing ')'\n";
                     yyerrok;
-                }
+                }                
                 ;
 
 

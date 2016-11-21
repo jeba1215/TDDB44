@@ -1,0 +1,13 @@
+!SESSION 2016-11-21 18:05:17.667 -----------------------------------------------
+eclipse.buildId=debbuild
+java.version=1.7.0_121
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=sv_SE
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.core.resources 4 77 2016-11-21 18:06:24.332
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2016-11-21 18:06:24.332
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2016-11-21 18:06:24.333
+!MESSAGE /home/jesba289/TDDB44/remaining overlaps the location of another project: 'remaining'
