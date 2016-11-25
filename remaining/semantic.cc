@@ -34,7 +34,6 @@ void semantic::do_typecheck(symbol *env, ast_stmt_list *body)
             type_error() << "A function must return a value.\n";
         }
     }
-    cout << "hello world2" << endl;
 }
 
 
@@ -161,6 +160,15 @@ sym_index semantic::check_binop1(ast_binaryoperation *node)
 sym_index ast_add::type_check()
 {
     /* Your code here */
+	if(left->type != right->type){
+		if(left->type == integer_type){
+			//cast left to real
+			left = new ast_cast(pos, left);
+		}else if(right->type == integer_type){
+			//cast right to real
+			right = new ast_cast(pos, right);
+		}
+	}
     return void_type;
 }
 
