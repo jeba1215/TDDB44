@@ -552,7 +552,10 @@ sym_index symbol_table::close_scope()
             symtemp->hash_link = -1;
         }
 
-        if(get_symbol(i-1) == NULL) break;
+        if(get_symbol(i-1) == NULL){
+        	cout << "close_scope loop break!" << endl;
+        	break;
+        }
         
     }
     

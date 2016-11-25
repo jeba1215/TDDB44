@@ -423,11 +423,11 @@ static yyconst flex_int32_t yy_ec[256] =
        18,   19,    1,    1,   20,   21,   22,   23,   24,   25,
        26,   27,   28,   29,   29,   30,   31,   32,   33,   34,
        29,   35,   36,   37,   38,   39,   40,   29,   41,   29,
-       42,    1,   43,    1,    1,    1,   44,   45,   46,   47,
+       42,    1,   43,    1,   44,    1,   45,   46,   47,   48,
 
-       48,   49,   50,   51,   52,   29,   29,   53,   54,   55,
-       56,   57,   29,   58,   59,   60,   61,   62,   63,   29,
-       64,   29,   65,    1,   66,    1,    1,    1,    1,    1,
+       49,   50,   51,   52,   53,   29,   29,   54,   55,   56,
+       57,   58,   29,   59,   60,   61,   62,   63,   64,   29,
+       65,   29,   66,    1,   67,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -444,7 +444,7 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst flex_int32_t yy_meta[67] =
+static yyconst flex_int32_t yy_meta[68] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    2,    1,    1,    1,    1,    1,    2,
@@ -452,27 +452,27 @@ static yyconst flex_int32_t yy_meta[67] =
         2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
         2,    1,    1,    2,    2,    2,    2,    2,    2,    2,
         2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
-        2,    2,    2,    2,    1,    1
+        2,    2,    2,    2,    2,    1,    1
     } ;
 
 static yyconst flex_int16_t yy_base[145] =
     {   0,
-        0,    0,   64,   65,   66,   67,  242,  256,  256,  256,
-      256,   71,  256,  256,  256,  256,  256,  256,  227,   73,
-       70,  222,  256,  218,  256,  256,   53,   47,   42,   63,
-       57,   45,    0,   65,   60,   64,   78,   64,   76,   74,
-       82,   77,  256,  256,  256,  256,  256,  223,  225,  256,
-      256,  164,  256,  102,  256,  223,  107,  256,  223,  115,
-      123,  129,  256,  256,    0,   94,   88,  104,  102,  103,
-        0,  108,  122,  117,    0,  127,  115,    0,    0,  120,
-      119,  134,  125,  133,  256,  256,  256,  222,  256,  145,
-      137,  134,    0,  142,  136,  130,    0,  149,    0,  146,
+        0,    0,   65,   66,   67,   68,  244,  254,  254,  254,
+      254,   72,  254,  254,  254,  254,  254,  254,  229,   74,
+       71,  224,  254,  222,  254,  254,   54,   48,   43,   65,
+       58,   46,    0,   66,   66,   68,   67,   68,   70,   69,
+       84,   78,  254,  254,  254,  254,  254,  226,  230,  254,
+      254,  165,  254,  104,  254,  223,  114,  254,  223,  117,
+      125,  131,  254,  254,    0,   88,   89,  106,  111,  105,
+        0,  110,  110,  115,    0,  127,  115,    0,    0,  120,
+      117,  131,  124,  128,  254,  254,  254,  219,  254,  207,
+      185,  137,    0,  140,  133,  128,    0,  141,    0,  140,
 
-        0,    0,  158,  132,  155,    0,  160,   95,  150,  162,
-      158,    0,  153,  159,  157,  163,  164,    0,  176,    0,
-        0,    0,    0,  175,  183,  187,  177,    0,  178,  174,
-      184,    0,  184,  185,    0,    0,  199,    0,  256,  247,
-      249,  251,   90,  253
+        0,    0,  167,  134,  141,    0,  149,  101,  141,  152,
+      154,    0,  167,  158,  174,  165,  166,    0,  178,    0,
+        0,    0,    0,  176,  182,  187,  177,    0,  177,  173,
+      181,    0,  181,  181,    0,    0,  196,    0,  254,  245,
+      247,  249,  104,  251
     } ;
 
 static yyconst flex_int16_t yy_def[145] =
@@ -495,36 +495,36 @@ static yyconst flex_int16_t yy_def[145] =
       139,  139,  139,  139
     } ;
 
-static yyconst flex_int16_t yy_nxt[323] =
+static yyconst flex_int16_t yy_nxt[322] =
     {   0,
         8,    9,   10,   11,   12,   13,   14,   15,   16,   17,
        18,   19,   20,   21,   22,   23,   24,   25,   26,   27,
        28,   29,   30,   31,   32,   33,   33,   34,   33,   33,
        35,   36,   37,   38,   39,   33,   40,   33,   41,   42,
-       33,   43,   44,   27,   28,   29,   30,   31,   32,   33,
-       33,   34,   33,   35,   36,   37,   38,   39,   33,   40,
-       33,   41,   42,   33,   45,    8,   47,   47,   51,   51,
-       68,   48,   48,   55,   69,   56,   49,   49,   52,   52,
-       58,   60,   74,   61,   66,   59,   72,   67,   73,   75,
-       70,   65,   76,   62,   68,   71,   77,   69,   80,   81,
+       33,   43,   44,    8,   27,   28,   29,   30,   31,   32,
+       33,   33,   34,   33,   35,   36,   37,   38,   39,   33,
+       40,   33,   41,   42,   33,   45,    8,   47,   47,   51,
+       51,   68,   48,   48,   55,   69,   56,   49,   49,   52,
+       52,   58,   60,   74,   61,   66,   59,   72,   67,   73,
+       75,   78,   70,   81,   62,   82,   68,   71,   76,   69,
 
-       82,   83,   78,   84,   55,   74,   56,   66,  108,   72,
-       67,   73,   79,   75,   70,   76,   93,   62,   71,   77,
-       57,   80,   94,   81,   82,   83,   78,   84,   57,   95,
-       62,   53,   53,   96,   60,   79,   61,   91,   90,   91,
-       93,   97,   92,   98,   99,   94,   62,   92,  100,  101,
-       92,  102,  103,   95,   62,  104,   96,  105,  108,  106,
-      107,  109,   90,  110,   97,  111,   98,  114,   99,  117,
-       62,  100,  112,  101,  102,  103,  113,  123,  104,  115,
-      125,  105,  106,  116,  107,  109,  118,  110,  111,  119,
-      120,  114,  117,  121,  122,  124,  112,  126,  127,  128,
+       77,   79,   80,   83,   84,   65,   55,   74,   56,   66,
+       93,   72,   67,   73,  108,   75,   78,   70,   81,   62,
+       82,   71,   76,   94,   77,   79,   80,   57,   83,   84,
+       57,   95,   99,   53,   53,   93,   60,   62,   61,   91,
+       90,   91,   96,   97,   92,   98,  100,   94,   62,  101,
+       92,  102,  103,  104,  105,  107,   95,   99,  106,  109,
+      110,  114,   62,  111,  112,   90,   96,   97,  113,   98,
+      100,  117,  118,   62,  101,  102,  103,  104,  119,  105,
+      107,  120,  106,  121,  109,  110,  114,  111,  115,  112,
+      122,  123,  116,  113,  124,  117,  118,  125,   92,  126,
 
-      113,  123,  129,  115,  125,  130,  131,  116,  132,  118,
-      133,  134,  119,  120,  135,  136,  121,  122,  124,  137,
-      126,  127,  138,  128,   89,   89,  129,   54,   87,  130,
-      131,  132,   86,  133,  134,   85,   64,  135,  136,   63,
-       57,  139,  137,  139,  139,  139,  138,   46,   46,   50,
-       50,   54,   54,   88,   88,    7,  139,  139,  139,  139,
+      127,  128,  119,  129,  130,  120,  131,  121,  132,  133,
+      134,  135,  136,  115,  122,  137,  123,  116,  124,  138,
+      108,   89,  125,  126,  127,   89,  128,   54,  129,  130,
+       87,  131,  132,  133,  134,  135,  136,   86,   85,  137,
+       64,   63,   57,  139,  138,   46,   46,   50,   50,   54,
+       54,   88,   88,    7,  139,  139,  139,  139,  139,  139,
       139,  139,  139,  139,  139,  139,  139,  139,  139,  139,
       139,  139,  139,  139,  139,  139,  139,  139,  139,  139,
       139,  139,  139,  139,  139,  139,  139,  139,  139,  139,
@@ -532,10 +532,10 @@ static yyconst flex_int16_t yy_nxt[323] =
 
       139,  139,  139,  139,  139,  139,  139,  139,  139,  139,
       139,  139,  139,  139,  139,  139,  139,  139,  139,  139,
-      139,  139
+      139
     } ;
 
-static yyconst flex_int16_t yy_chk[323] =
+static yyconst flex_int16_t yy_chk[322] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -543,28 +543,28 @@ static yyconst flex_int16_t yy_chk[323] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    3,    4,    5,    6,
-       28,    3,    4,   12,   29,   12,    3,    4,    5,    6,
-       20,   21,   32,   21,   27,   20,   31,   27,   31,   34,
-       30,  143,   35,   21,   28,   30,   36,   29,   38,   39,
+        1,    1,    1,    1,    1,    1,    1,    3,    4,    5,
+        6,   28,    3,    4,   12,   29,   12,    3,    4,    5,
+        6,   20,   21,   32,   21,   27,   20,   31,   27,   31,
+       34,   37,   30,   39,   21,   40,   28,   30,   35,   29,
 
-       40,   41,   37,   42,   54,   32,   54,   27,  108,   31,
-       27,   31,   37,   34,   30,   35,   66,   21,   30,   36,
-       57,   38,   67,   39,   40,   41,   37,   42,   60,   68,
-       57,    5,    6,   69,   61,   37,   61,   62,   60,   62,
-       66,   70,   62,   72,   73,   67,   61,   92,   74,   76,
-       91,   77,   80,   68,   57,   81,   69,   82,   90,   83,
-       84,   94,   60,   95,   70,   96,   72,  100,   73,  104,
-       61,   74,   98,   76,   77,   80,   98,  113,   81,  103,
-      115,   82,   83,  103,   84,   94,  105,   95,   96,  107,
-      109,  100,  104,  110,  111,  114,   98,  116,  117,  119,
+       36,   37,   38,   41,   42,  143,   54,   32,   54,   27,
+       66,   31,   27,   31,  108,   34,   37,   30,   39,   21,
+       40,   30,   35,   67,   36,   37,   38,   57,   41,   42,
+       60,   68,   73,    5,    6,   66,   61,   57,   61,   62,
+       60,   62,   69,   70,   62,   72,   74,   67,   61,   76,
+       92,   77,   80,   81,   82,   84,   68,   73,   83,   94,
+       95,  100,   57,   96,   98,   60,   69,   70,   98,   72,
+       74,  104,  105,   61,   76,   77,   80,   81,  107,   82,
+       84,  109,   83,  110,   94,   95,  100,   96,  103,   98,
+      111,  113,  103,   98,  114,  104,  105,  115,   91,  116,
 
-       98,  113,  124,  103,  115,  125,  126,  103,  127,  105,
-      129,  130,  107,  109,  131,  133,  110,  111,  114,  134,
-      116,  117,  137,  119,   88,   59,  124,   56,   52,  125,
-      126,  127,   49,  129,  130,   48,   24,  131,  133,   22,
-       19,    7,  134,    0,    0,    0,  137,  140,  140,  141,
-      141,  142,  142,  144,  144,  139,  139,  139,  139,  139,
+      117,  119,  107,  124,  125,  109,  126,  110,  127,  129,
+      130,  131,  133,  103,  111,  134,  113,  103,  114,  137,
+       90,   88,  115,  116,  117,   59,  119,   56,  124,  125,
+       52,  126,  127,  129,  130,  131,  133,   49,   48,  134,
+       24,   22,   19,    7,  137,  140,  140,  141,  141,  142,
+      142,  144,  144,  139,  139,  139,  139,  139,  139,  139,
       139,  139,  139,  139,  139,  139,  139,  139,  139,  139,
       139,  139,  139,  139,  139,  139,  139,  139,  139,  139,
       139,  139,  139,  139,  139,  139,  139,  139,  139,  139,
@@ -572,7 +572,7 @@ static yyconst flex_int16_t yy_chk[323] =
 
       139,  139,  139,  139,  139,  139,  139,  139,  139,  139,
       139,  139,  139,  139,  139,  139,  139,  139,  139,  139,
-      139,  139
+      139
     } ;
 
 /* Table of booleans, true if rule could match eol. */
@@ -882,7 +882,7 @@ yy_match:
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 256 );
+		while ( yy_base[yy_current_state] != 254 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -1162,12 +1162,15 @@ case 25:
 YY_RULE_SETUP
 #line 196 "scanner.l"
 {
-                            
+                            yylloc.first_line = yylineno;
+                            yylloc.first_column = column;
+                            column += yyleng;
+                            return T_IDIV;
                          }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 199 "scanner.l"
+#line 202 "scanner.l"
 {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
@@ -1177,7 +1180,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 205 "scanner.l"
+#line 208 "scanner.l"
 {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
@@ -1187,7 +1190,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 211 "scanner.l"
+#line 214 "scanner.l"
 {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
@@ -1197,7 +1200,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 217 "scanner.l"
+#line 220 "scanner.l"
 {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
@@ -1207,7 +1210,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 223 "scanner.l"
+#line 226 "scanner.l"
 {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
@@ -1217,7 +1220,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 229 "scanner.l"
+#line 232 "scanner.l"
 {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
@@ -1227,7 +1230,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 235 "scanner.l"
+#line 238 "scanner.l"
 {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
@@ -1237,7 +1240,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 241 "scanner.l"
+#line 244 "scanner.l"
 {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
@@ -1247,7 +1250,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 247 "scanner.l"
+#line 250 "scanner.l"
 {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
@@ -1257,7 +1260,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 253 "scanner.l"
+#line 256 "scanner.l"
 {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
@@ -1267,7 +1270,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 259 "scanner.l"
+#line 262 "scanner.l"
 {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
@@ -1277,7 +1280,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 265 "scanner.l"
+#line 268 "scanner.l"
 {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
@@ -1287,7 +1290,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 271 "scanner.l"
+#line 274 "scanner.l"
 {
                             yylloc.first_line = yylineno;
                             yylloc.first_column = column;
@@ -1300,12 +1303,12 @@ case 39:
 (yy_c_buf_p) = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 279 "scanner.l"
+#line 282 "scanner.l"
 column = 0; /* Skip single-line comment */
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 280 "scanner.l"
+#line 283 "scanner.l"
 {
                             column += yyleng;
                             BEGIN(c_comment);
@@ -1315,7 +1318,7 @@ YY_RULE_SETUP
 
 case 41:
 YY_RULE_SETUP
-#line 287 "scanner.l"
+#line 290 "scanner.l"
 {
                             column += 2;
                             BEGIN(INITIAL);
@@ -1323,7 +1326,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 291 "scanner.l"
+#line 294 "scanner.l"
 {
                             column += 2;
                             yyerror("Suspicious comment");
@@ -1331,17 +1334,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 295 "scanner.l"
+#line 298 "scanner.l"
 column++; /* Skip stuff in comments */
 	YY_BREAK
 case 44:
 /* rule 44 can match eol */
 YY_RULE_SETUP
-#line 296 "scanner.l"
+#line 299 "scanner.l"
 column = 0;
 	YY_BREAK
 case YY_STATE_EOF(c_comment):
-#line 297 "scanner.l"
+#line 300 "scanner.l"
 {
                             yyerror("Unterminated comment");
                             yyterminate();
@@ -1350,7 +1353,7 @@ case YY_STATE_EOF(c_comment):
 
 case 45:
 YY_RULE_SETUP
-#line 303 "scanner.l"
+#line 306 "scanner.l"
 {
                             column += yyleng;
                             BEGIN(comment);
@@ -1360,7 +1363,7 @@ YY_RULE_SETUP
 
 case 46:
 YY_RULE_SETUP
-#line 310 "scanner.l"
+#line 313 "scanner.l"
 {
                             column += 2;
                             BEGIN(INITIAL);
@@ -1368,7 +1371,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 314 "scanner.l"
+#line 317 "scanner.l"
 {
                             column += 2;
                             yyerror("Suspicious comment");
@@ -1376,17 +1379,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 318 "scanner.l"
+#line 321 "scanner.l"
 column++; /* Skip stuff in comments */
 	YY_BREAK
 case 49:
 /* rule 49 can match eol */
 YY_RULE_SETUP
-#line 319 "scanner.l"
+#line 322 "scanner.l"
 column = 0;
 	YY_BREAK
 case YY_STATE_EOF(comment):
-#line 320 "scanner.l"
+#line 323 "scanner.l"
 {
                             yyerror("Unterminated comment");
                             yyterminate();
@@ -1395,7 +1398,7 @@ case YY_STATE_EOF(comment):
 
 case 50:
 YY_RULE_SETUP
-#line 326 "scanner.l"
+#line 329 "scanner.l"
 {
     column += yyleng;
 }
@@ -1403,14 +1406,14 @@ YY_RULE_SETUP
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 329 "scanner.l"
+#line 332 "scanner.l"
 {
     column = 0;    
 }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 332 "scanner.l"
+#line 335 "scanner.l"
 {
     yylloc.first_line = yylineno;
     yylloc.first_column = column;
@@ -1421,7 +1424,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 339 "scanner.l"
+#line 342 "scanner.l"
 {
     yylloc.first_line = yylineno;
     yylloc.first_column = column;
@@ -1432,7 +1435,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 346 "scanner.l"
+#line 349 "scanner.l"
 {
     yylloc.first_line = yylineno;
     yylloc.first_column = column;
@@ -1443,7 +1446,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 353 "scanner.l"
+#line 356 "scanner.l"
 {
     yylloc.first_line = yylineno;
     yylloc.first_column = column;
@@ -1455,26 +1458,26 @@ YY_RULE_SETUP
 case 56:
 /* rule 56 can match eol */
 YY_RULE_SETUP
-#line 360 "scanner.l"
+#line 363 "scanner.l"
 {
     yyerror("Newline in string");
 }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 364 "scanner.l"
+#line 367 "scanner.l"
 yyterminate();
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 365 "scanner.l"
+#line 368 "scanner.l"
 yyerror("Illegal character");
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 366 "scanner.l"
+#line 369 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1478 "scanner.cc"
+#line 1481 "scanner.cc"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2482,4 +2485,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 366 "scanner.l"
+#line 369 "scanner.l"

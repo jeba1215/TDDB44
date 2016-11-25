@@ -63,7 +63,11 @@ begin
 end;
 
 begin
-	a := 1; b := 2;	x := 1; y := 3.14;
+	a := 1; 
+	b := 2;	
+	x := 1; 
+	y := 3.14;
+
 	index(a);
 	nasty(1 div 2, 5, 1/2, 8.0+7);
 end.

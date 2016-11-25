@@ -33,7 +33,7 @@ INTEGER [0-9]+
 WS [ \t]
 NL [\n\r]
 REAL ({INTEGER}\.([eE]{INTEGER})?|[0-9]*\.?{INTEGER}([eE][-+]?{INTEGER})?)
-ID [a-z][a-z0-9]*
+ID [a-z][a-z0-9_]*
 STRINGNL '(('')|[^'\n])*\n
 
 /* Position information is entered into the yylloc variable, so we will be
@@ -194,7 +194,10 @@ and                      {
                             return T_AND;  
                          }
 div                      {
-                            
+                            yylloc.first_line = yylineno;
+                            yylloc.first_column = column;
+                            column += yyleng;
+                            return T_IDIV;
                          }
 mod                      {
                             yylloc.first_line = yylineno;

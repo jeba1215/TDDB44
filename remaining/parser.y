@@ -122,8 +122,9 @@ extern bool assembler;
 
 
 program         : prog_decl subprog_part comp_stmt T_DOT
-                {
+                {                	
                     symbol *env = sym_tab->get_symbol($1->sym_p);
+                    
 
                     // The status variables here depend on what flags were
                     // passed to the compiler. See the 'diesel' script for
@@ -178,10 +179,10 @@ prog_decl       : prog_head T_SEMICOLON const_part variable_part
 
 prog_head       : T_PROGRAM T_IDENT
                 {
-                    /* Your code here */         
+                    /* Your code here */                       
                     position_information *pos = new position_information(@1.first_line, @1.first_column);
-                    sym_tab->enter_procedure(pos, $2);
-                    $$ = new ast_procedurehead(pos, $2);
+                                        
+                    $$ = new ast_procedurehead(pos, sym_tab->enter_procedure(pos, $2));
                     sym_tab->open_scope();
                 }
                 ;
@@ -543,8 +544,6 @@ param           : T_IDENT T_COLON type_id
 comp_stmt       : T_BEGIN stmt_list T_END
                 {
                     /* Your code here */
-                    //cout << "comp_stmnt - " << $2 << endl;
-                    //cout << $2 << endl;
                     $$ = $2;
                 }
                 ;
@@ -610,12 +609,6 @@ stmt            : T_IF expr T_THEN stmt_list elsif_list else_part T_END
                     /* Your code here */
                     position_information *pos = new position_information(@1.first_line, @1.first_column);
                     $$ = new ast_return(pos);
-                }
-                | error
-                {
-                    position_information *pos = new position_information(@1.first_line, @1.first_column);
-                    error(pos) << "statement error\n";
-                    yyerrok;
                 }
                 | /* empty */
                 {
@@ -825,7 +818,6 @@ term            : factor
                 }
                 | term T_IDIV factor
                 {
-                    /* Your code here */
                     position_information *pos = new position_information(@1.first_line, @1.first_column);
                     $$ = new ast_idiv(pos, $1, $3);
                 }

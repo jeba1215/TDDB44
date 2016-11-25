@@ -34,6 +34,7 @@ void semantic::do_typecheck(symbol *env, ast_stmt_list *body)
             type_error() << "A function must return a value.\n";
         }
     }
+    cout << "hello world2" << endl;
 }
 
 
@@ -360,7 +361,14 @@ sym_index ast_not::type_check()
 sym_index ast_elsif::type_check()
 {
     /* Your code here */
-    return void_type;
+	//Condition must be integer
+	if( condition->type == integer_type ){
+				return integer_type;
+			} else {
+				type_error(condition->pos) << "Condition is not of type integer.\n";
+			}
+
+	return void_type;
 }
 
 
