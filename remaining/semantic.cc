@@ -197,6 +197,7 @@ sym_index ast_indexed::type_check()
 {
 	sym_index id_type = this->id->type_check();
 	sym_index index_type = this->index->type_check();
+	this->type = id->type;
 
 	if(index_type == integer_type){
 		return id_type;
@@ -222,7 +223,11 @@ sym_index semantic::check_binop1(ast_binaryoperation *node)
     if(lhs_type == integer_type && rhs_type == integer_type){
     	node->type = integer_type;
     	return integer_type;
-    } else if(lhs_type == integer_type){
+    } else if(lhs_type == real_type && rhs_type == real_type){
+    	node->type = real_type;
+    	return real_type;
+    }
+    else if(lhs_type == integer_type){
     	node->left = new ast_cast(node->left->pos, node->left);
     	node->type = real_type;
     	return real_type;
@@ -492,7 +497,7 @@ sym_index ast_functioncall::type_check()
 sym_index ast_uminus::type_check()
 {
     /* Your code here */
-	this->expr->type_check();
+	this->type = this->expr->type_check();
 	return this->type;
 }
 
