@@ -268,9 +268,11 @@ sym_index ast_divide::type_check()
 
    	if(this->left->type == integer_type){
    		this->left = new ast_cast(this->left->pos, this->left);
-   	} if(this->right->type == integer_type){
+   	}
+   	if(this->right->type == integer_type){
    		this->right = new ast_cast(this->right->pos, this->right);
    	}
+
    	return real_type;
 }
 

@@ -129,6 +129,41 @@ ast_expression *ast_optimizer::fold_constants(ast_expression *node) {
 				double left = binop->left->get_ast_real()->value;
 				double right = binop->right->get_ast_real()->value;
 				return new ast_real(binop->pos, left + right);
+			} else if (binop->left->tag == AST_ID) {
+				symbol* sym = sym_tab->get_symbol(
+						binop->left->get_ast_id()->sym_p);
+				if (sym->tag == SYM_CONST && sym->type == integer_type
+						&& binop->right->type == integer_type) {
+
+					int ival = sym->get_constant_symbol()->const_value.ival;
+					return new ast_integer(binop->pos,
+							binop->right->get_ast_integer()->value + ival);
+				}
+				if (sym->tag == SYM_CONST && sym->type == real_type) {
+					return new ast_real(binop->pos,
+							binop->right->get_ast_real()->value
+									+ sym->get_constant_symbol()->const_value.rval);
+				}
+				//Couldn't optimize
+				return node;
+			} else if (binop->right->tag == AST_ID) {
+				symbol* sym = sym_tab->get_symbol(
+						binop->left->get_ast_id()->sym_p);
+				if (sym->tag == SYM_CONST && sym->type == integer_type
+						&& binop->left->type == integer_type) {
+
+					double rval = sym->get_constant_symbol()->const_value.rval;
+					return new ast_integer(binop->pos,
+							binop->left->get_ast_integer()->value
+									+ rval);
+				}
+				if (sym->tag == SYM_CONST && sym->type == real_type) {
+					return new ast_real(binop->pos,
+							binop->left->get_ast_real()->value
+									+ sym->get_constant_symbol()->const_value.rval);
+				}
+				//Couldn't optimize
+				return node;
 			} else {
 				return node;
 			}
