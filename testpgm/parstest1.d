@@ -13,6 +13,6 @@ end;
 begin
     i := echo(10289);
     y := 1;
-    y := y div y;
+    y := y div y;½½½
     arr[1] := i;
 end.

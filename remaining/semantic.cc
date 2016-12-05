@@ -425,10 +425,10 @@ sym_index ast_while::type_check()
 sym_index ast_if::type_check()
 {
     /* Your code here */
-	sym_index condition_type = this->condition->type_check();
+	this->condition->type_check();
 	this->body->type_check();
 
-	if(condition_type != integer_type){
+	if(this->condition->type != integer_type){
 		type_error(condition->pos) << "if predicate must be of integer type.\n";
 		return void_type;
 	}

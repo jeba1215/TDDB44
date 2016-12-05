@@ -8,7 +8,7 @@ var
     y : integer;
 
 begin
-    x := (y + 3;
+    x := (y + 3);
     y := 10 - 5*TWO;
 end.
 { End of parstest2.d }
