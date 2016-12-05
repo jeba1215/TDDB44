@@ -167,13 +167,15 @@ long symbol_table::get_next_label() {
 sym_index symbol_table::gen_temp_var(sym_index type) {
 	/* Your code here */
 	if (type != void_type) {
-		temp_nr++;
 		char *var = new char[2];
-		var[0] = '$';
-		var[1] = static_cast<char>(temp_nr);
+
+		temp_nr++;
+		sprintf(var, "$%ld", temp_nr);
 
 		long pool_p = sym_tab->pool_install(var);
 		return sym_tab->enter_variable(pool_p, type);
+	}else{
+		fatal("trying to declare temp var of type void");
 	}
 
 	//type is void

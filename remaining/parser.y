@@ -595,7 +595,7 @@ stmt            : T_IF expr T_THEN stmt_list elsif_list else_part T_END
                 | lvariable T_ASSIGN expr
                 {
                     /* Your code here */
-                    position_information *pos = new position_information(@1.first_line, @1.first_column);
+                    position_information *pos = new position_information(@2.first_line, @2.first_column);
                     $$ = new ast_assign(pos, $1, $3);
                 }
                 | T_RETURN expr

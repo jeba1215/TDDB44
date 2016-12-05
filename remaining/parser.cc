@@ -2090,7 +2090,7 @@ yyreduce:
 #line 596 "parser.y" /* yacc.c:1646  */
     {
                     /* Your code here */
-                    position_information *pos = new position_information((yylsp[-2]).first_line, (yylsp[-2]).first_column);
+                    position_information *pos = new position_information((yylsp[-1]).first_line, (yylsp[-1]).first_column);
                     (yyval.statement) = new ast_assign(pos, (yyvsp[-2].lvalue), (yyvsp[0].expression));
                 }
 #line 2097 "parser.cc" /* yacc.c:1646  */
