@@ -146,6 +146,8 @@ sym_index ast_integer::generate_quads(quad_list &q)
 {
     USE_Q;
     /* Your code here */
+    //q += new quadruple(q_iload, this->value, NULL_SYM, )
+    //q += new quadruple(, , , );
     return NULL_SYM;
 }
 
