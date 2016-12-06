@@ -374,6 +374,13 @@ void ast_expr_list::generate_parameter_list(quad_list &q,
 	USE_Q
 	;
 	/* Your code here */
+	if (this->preceding != NULL) {
+		*nr_params = *nr_params + 1;
+		sym_index i = this->preceding->last_expr->generate_quads(q);
+		q += new quadruple(q_param, i, NULL_SYM, NULL_SYM);
+		this->preceding->generate_parameter_list(q, last_param->preceding,
+				nr_params);
+	}
 }
 
 /* Generate quads for a procedure call. */
@@ -381,6 +388,21 @@ sym_index ast_procedurecall::generate_quads(quad_list &q) {
 	USE_Q
 	;
 	/* Your code here */
+	int x = 0;
+	int* nr_params = &x;
+
+	if (this->parameter_list != NULL) {
+		*nr_params = *nr_params + 1;
+		sym_index i = this->parameter_list->last_expr->generate_quads(q);
+		q += new quadruple(q_param, i, NULL_SYM, NULL_SYM);
+
+		procedure_symbol* symb =
+				sym_tab->get_symbol(this->id->sym_p)->get_procedure_symbol();
+
+		this->parameter_list->generate_parameter_list(q, symb->last_parameter,
+				nr_params);
+	}
+	q += new quadruple(q_call, this->id->sym_p, *nr_params, NULL_SYM);
 	return NULL_SYM;
 }
 
@@ -389,7 +411,24 @@ sym_index ast_functioncall::generate_quads(quad_list &q) {
 	USE_Q
 	;
 	/* Your code here */
-	return NULL_SYM;
+	int x = 0;
+	int* nr_params = &x;
+	sym_index temp = sym_tab->gen_temp_var(this->type);
+
+	if (this->parameter_list != NULL) {
+		*nr_params = *nr_params + 1;
+		sym_index i = this->parameter_list->last_expr->generate_quads(q);
+		q += new quadruple(q_param, i, NULL_SYM, NULL_SYM);
+
+		function_symbol* symb =
+				sym_tab->get_symbol(this->id->sym_p)->get_function_symbol();
+
+		this->parameter_list->generate_parameter_list(q, symb->last_parameter,
+				nr_params);
+	}
+
+	q += new quadruple(q_call, this->id->sym_p, *nr_params, temp);
+	return temp;
 }
 
 /* Generate quads for a while statement.
@@ -431,7 +470,7 @@ void ast_elsif::generate_quads_and_jump(quad_list &q, int label) {
 	sym_index cond = this->condition->generate_quads(q);
 	q += new quadruple(q_jmpf, next, cond, NULL_SYM);
 
-	if(this->body != NULL)
+	if (this->body != NULL)
 		this->body->generate_quads(q);
 
 	q += new quadruple(q_jmp, label, NULL_SYM, NULL_SYM);
@@ -486,18 +525,19 @@ sym_index ast_return::generate_quads(quad_list &q) {
 	USE_Q
 	;
 	/* Your code here */
-	int end = sym_tab->get_next_label();
 
-	sym_index i = this->value->generate_quads(q);
-	sym_index temp = sym_tab->gen_temp_var(this->value->type);
+	sym_index i = NULL_SYM;
+	if (this->value != NULL) {
+		sym_index i = this->value->generate_quads(q);
+		if (this->value->type == integer_type)
+			q += new quadruple(q_ireturn, q.last_label, i, NULL_SYM);
+		else
+			q += new quadruple(q_rreturn, q.last_label, i, NULL_SYM);
+	}else {
+		q += new quadruple(q_rreturn, q.last_label, NULL_SYM, NULL_SYM);
+	}
 
-	if (this->value->type == integer_type)
-		q += new quadruple(q_ireturn, end, i, temp);
-	else
-		q += new quadruple(q_rlt, end, i, temp);
-
-	q += new quadruple(q_labl, end, NULL_SYM, NULL_SYM);
-	return temp;
+	return NULL_SYM;
 }
 
 /* Generate quads for an array reference. */
@@ -506,7 +546,17 @@ sym_index ast_indexed::generate_quads(quad_list &q) {
 	;
 	/* Your code here */
 
-	return NULL_SYM;
+	sym_index i = this->index->generate_quads(q);
+	sym_index temp = sym_tab->gen_temp_var(this->index->type);
+
+	if (this->id->type == integer_type) {
+		q += new quadruple(q_irindex, this->id->sym_p, i, temp);
+	} else if (this->id->type == real_type) {
+		q += new quadruple(q_rrindex, this->id->sym_p, i, temp);
+	} else {
+		fatal("strange type in ast:indexed");
+	}
+	return temp;
 }
 
 /* Generate quads for a list of statements. Note that this is not necessarily
