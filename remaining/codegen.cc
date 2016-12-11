@@ -65,6 +65,7 @@ void code_generator::prologue(symbol *new_env)
 {
     int ar_size;
     int label_nr;
+    int lvl;
     // Used to count parameters.
     parameter_symbol *last_arg;
 
@@ -77,12 +78,14 @@ void code_generator::prologue(symbol *new_env)
         ar_size = align(proc->ar_size);
         label_nr = proc->label_nr;
         last_arg = proc->last_parameter;
+        lvl = proc->level;
     } else if (new_env->tag == SYM_FUNC) {
         function_symbol *func = new_env->get_function_symbol();
         /* Make sure ar_size is a multiple of eight */
         ar_size = align(func->ar_size);
         label_nr = func->label_nr;
         last_arg = func->last_parameter;
+        lvl = func->level;
     } else {
         fatal("code_generator::prologue() called for non-proc/func");
         return;
@@ -99,6 +102,23 @@ void code_generator::prologue(symbol *new_env)
     }
 
     /* Your code here */
+
+    //store the previous RBP
+    out << "\t\t" << "push" << "\t" << "rbp" << endl;
+    //Save the previous RSP in a temporary location
+    out << "\t\t" << "mov" << "\t" << "rcx, rsp" << endl;
+
+    //any other display values are copied here
+    for (int i = 1; i <= lvl; i++){
+    	out << "\t\t" << "push" << "\t" << "[rbp-" << i*STACK_WIDTH << "]" << endl;
+    }
+
+    //push the previous RSP on the stack
+    out << "\t\t" << "push" << "\t" << "rcx" << endl;
+    //and really make it our new RBP
+    out << "\t\t" << "mov" << "\t" << "rbp, rcx" << endl;
+    //allocate space for temporary storage
+    out << "\t\t" << "sub" << "\t" << "rsp, " << ar_size << endl;
 
     out << flush;
 }
