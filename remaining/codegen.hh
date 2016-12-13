@@ -62,6 +62,7 @@ private:
     // Get frame base address.
     void frame_address(int level, const register_type);
 public:
+    bool isDebug = false;
     // Constructor. Arg = filename of assembler outfile.
     code_generator(const string);
 
@@ -70,6 +71,8 @@ public:
 
      // Interface.
     void generate_assembler(quad_list *, symbol *env);
+
+    void debug(string);
 };
 
 #endif

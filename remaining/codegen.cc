@@ -36,7 +36,11 @@ code_generator::~code_generator()
     out.close();
 }
 
-
+void code_generator::debug(string x){
+	if(isDebug){
+		out << x << "\n";
+	}
+}
 
 /* This method is called from parser.y when code generation is to start.
    The argument is a quad_list representing the body of the procedure, and
@@ -97,8 +101,7 @@ void code_generator::prologue(symbol *new_env)
         sym_tab->pool_lookup(new_env->id) << endl;
 
     if (assembler_trace) {
-        out << "\t" << "# PROLOGUE (" << short_symbols << new_env
-            << long_symbols << ")" << endl;
+        out << "\t" << "# PROLOGUE (" << short_symbols << new_env << long_symbols << ")" << endl;
     }
 
     /* Your code here */
@@ -118,8 +121,7 @@ void code_generator::prologue(symbol *new_env)
     //and really make it our new RBP
     out << "\t\t" << "mov" << "\t" << "rbp, rcx" << endl;
     //allocate space for temporary storage
-    out << "\t\t" << "sub" << "\t" << "rsp, " << ar_size << endl;
-
+    out << "\t\t" << "sub" << "\t" << "rsp, " << ar_size<< endl;
     out << flush;
 }
 
@@ -129,12 +131,12 @@ void code_generator::prologue(symbol *new_env)
 void code_generator::epilogue(symbol *old_env)
 {
     if (assembler_trace) {
-        out << "\t" << "# EPILOGUE (" << short_symbols << old_env
-            << long_symbols << ")" << endl;
+        out << "\t" << "# EPILOGUE (" << short_symbols << old_env << long_symbols << ")" << endl;
     }
 
     /* Your code here */
-
+    out << "\t\t" << "leave" << endl;
+    out << "\t\t" << "ret" << endl;
     out << flush;
 }
 
@@ -144,7 +146,24 @@ void code_generator::epilogue(symbol *old_env)
    array or a parameter. Note the pass-by-pointer arguments. */
 void code_generator::find(sym_index sym_p, int *level, int *offset)
 {
+	//debug("find");
     /* Your code here */
+	symbol* sym = sym_tab->get_symbol(sym_p);
+	*level = sym->level;
+
+	switch(sym->tag){
+	case SYM_PARAM:
+		//out << "symparam" << endl;
+		*offset = STACK_WIDTH + sym->get_parameter_symbol()->offset + sym->get_parameter_symbol()->size;
+		break;
+	case SYM_CONST:
+	case SYM_ARRAY:
+	case SYM_VAR:
+		*offset = -(( (sym->level + 1) * STACK_WIDTH) + sym->offset);
+		break;
+	default:
+		break;
+	}
 }
 
 /*
@@ -152,19 +171,49 @@ void code_generator::find(sym_index sym_p, int *level, int *offset)
  */
 void code_generator::frame_address(int level, const register_type dest)
 {
+	debug("frame_address");
     /* Your code here */
+	out << "\t\t" << "mov" << "\t" << reg[dest] << ", [rbp-" << (level)*STACK_WIDTH << "]\n";
 }
 
 /* This function fetches the value of a variable or a constant into a
    register. */
 void code_generator::fetch(sym_index sym_p, register_type dest)
 {
+	debug("fetch");
     /* Your code here */
+	symbol* sym = sym_tab->get_symbol(sym_p);
+	if(sym == NULL) return;
+	int level = 0;
+	int offset = 0;
+
+	switch(sym->tag){
+	case SYM_ARRAY:
+	case SYM_VAR:
+		find(sym_p, &level, &offset);
+		frame_address(level, RCX);
+		out << "\t\t" << "mov" << "\t" << reg[dest] << ", [rcx" << offset << "]\n";
+		break;
+	case SYM_CONST:
+
+		out << "\t\t" << "mov" << "\t" << reg[dest] << ", " << sym->get_constant_symbol()->const_value.ival << "\n";
+		break;
+	case SYM_PARAM:
+		find(sym_p, &level, &offset);
+		frame_address(level, RCX);
+		out << "\t\t" << "mov" << "\t" << reg[dest] << ", [rcx+" << offset << "]" << "\n";
+		break;
+	default:
+		break;
+	}
 }
 
 void code_generator::fetch_float(sym_index sym_p)
 {
+	debug("fetch float");
     /* Your code here */
+	// floats have to pass through memory, push to stack before pushing to the FPU
+	// remember to decrement the RSP
 }
 
 
@@ -172,11 +221,34 @@ void code_generator::fetch_float(sym_index sym_p)
 /* This function stores the value of a register into a variable. */
 void code_generator::store(register_type src, sym_index sym_p)
 {
+	debug("store");
     /* Your code here */
+	int offset = 0;
+	int level = 0;
+	find(sym_p, &level, &offset);
+
+	symbol* sym = sym_tab->get_symbol(sym_p);
+
+	switch(sym->tag){
+	case SYM_PARAM:
+		frame_address(level, RCX);
+		out << "\t\t" << "mov" << "\t[" << reg[RCX] << "+" << offset << "], " << reg[src] << "\n";
+		break;
+	case SYM_ARRAY:
+	case SYM_VAR:
+		frame_address(level, RCX);
+		out << "\t\t" << "mov" << "\t[" << reg[RCX] << offset << "], " << reg[src] << "\n";
+		break;
+	default:
+		break;
+	}
+
+	//frame_address(level, RCX);
 }
 
 void code_generator::store_float(sym_index sym_p)
 {
+	debug("store float");
     /* Your code here */
 }
 
@@ -184,12 +256,23 @@ void code_generator::store_float(sym_index sym_p)
 /* This function fetches the base address of an array. */
 void code_generator::array_address(sym_index sym_p, register_type dest)
 {
+	debug("array_address");
+	symbol* sym = sym_tab->get_symbol(sym_p);
     /* Your code here */
+	int level = 0;
+	int offset = 0;
+
+	find(sym_p, &level, &offset);
+	frame_address(level, RCX);
+
+	out << "\t\t" << "sub" << "\t" << reg[RCX] << ", " << ((sym->level + 1) * STACK_WIDTH + sym->offset) << "\n";
+	out << "\t\t" << "mov" << "\t" << reg[dest] << ", " << reg[RCX] << "\n";
 }
 
 /* This method expands a quad_list into assembler code, quad for quad. */
 void code_generator::expand(quad_list *q_list)
 {
+	debug("expand");
     long quad_nr = 0;       // Just to make debug output easier to read.
     
 
@@ -209,14 +292,14 @@ void code_generator::expand(quad_list *q_list)
 
         // Debug output.
         if (assembler_trace) {
-            out << "\t" << "# QUAD " << quad_nr << ": "
-                << short_symbols << q << long_symbols << endl;
+            out << "\t" << "# QUAD " << quad_nr << ": " << short_symbols << q << long_symbols << endl;
         }
 
         // The main switch on quad type. This is where code is actually
         // generated.
         switch (q->op_code) {
         case q_rload:
+        	debug("q_rload");
         case q_iload:
             out << "\t\t" << "mov" << "\t" << "rax, " << q->int1 << endl;
             store(RAX, q->sym3);
@@ -536,10 +619,33 @@ void code_generator::expand(quad_list *q_list)
 
         case q_param:
             /* Your code here */
+        	debug("q_param");
+        	fetch(q->sym1, RAX);
+        	out << "\t\t" << "push" << "\t" << reg[RAX] << endl;
             break;
 
         case q_call: {
             /* Your code here */
+        	debug("q_call");
+        	symbol* sym = sym_tab->get_symbol(q->sym1);
+        	int size = 0;
+        	string name = "";
+        	switch(sym->tag){
+        	case SYM_PROC:
+        		size = sym->get_procedure_symbol()->last_parameter->size;
+        		name = sym_tab->pool_lookup(sym->get_procedure_symbol()->id);
+        		out << "\t\t" << "call" << "\t" << "L" << sym->get_procedure_symbol()->label_nr << "\t# " << name << endl;
+        		break;
+        	case SYM_FUNC:
+        		size = sym->get_function_symbol()->last_parameter->size;
+        		name = sym_tab->pool_lookup(sym->get_function_symbol()->id);
+        		out << "\t\t" << "call" << "\t" << "L" << sym->get_function_symbol()->label_nr << "\t# " << name << endl;
+        		break;
+        	default:
+        		break;
+        	}
+
+        	out << "\t\t" << "add" << "\t" << "rsp, " << size << endl;
             break;
         }
         case q_rreturn:
@@ -557,6 +663,7 @@ void code_generator::expand(quad_list *q_list)
             break;
 
         case q_rrindex:
+        	debug("q_rrindex");
         case q_irindex:
             array_address(q->sym1, RAX);
             fetch(q->sym2, RCX);

@@ -88,8 +88,7 @@ sym_index ast_elsif_list::generate_quads(quad_list &q) {
 	USE_Q
 	;
 
-	fatal(
-			"Trying to call generate_quads for ast_elsif_list. Try 'generate_quads_and_jump' instead.");
+	fatal("Trying to call generate_quads for ast_elsif_list. Try 'generate_quads_and_jump' instead.");
 	return NULL_SYM;
 }
 
@@ -498,15 +497,31 @@ sym_index ast_if::generate_quads(quad_list &q) {
 	USE_Q
 	;
 	/* Your code here */
-	int next = sym_tab->get_next_label();
+	int next = 0;
+	if(this->elsif_list != NULL || this->else_body != NULL){
+		next = sym_tab->get_next_label();
+	}
+
 	int bottom = sym_tab->get_next_label();
 
 	sym_index cond = this->condition->generate_quads(q);
-	q += new quadruple(q_jmpf, next, cond, NULL_SYM);
-	this->body->generate_quads(q);
-	q += new quadruple(q_jmp, bottom, NULL_SYM, NULL_SYM);
 
-	q += new quadruple(q_labl, next, NULL_SYM, NULL_SYM);
+	if(this->elsif_list != NULL || this->else_body != NULL){
+		q += new quadruple(q_jmpf, next, cond, NULL_SYM);
+	} else {
+		q += new quadruple(q_jmpf, bottom, cond, NULL_SYM);
+	}
+
+
+
+	this->body->generate_quads(q);
+	if(this->elsif_list != NULL || this->else_body != NULL){
+		q += new quadruple(q_jmp, bottom, NULL_SYM, NULL_SYM);
+	}
+
+	if(this->elsif_list != NULL || this->else_body != NULL){
+		q += new quadruple(q_labl, next, NULL_SYM, NULL_SYM);
+	}
 	if (this->elsif_list != NULL) {
 		this->elsif_list->generate_quads_and_jump(q, bottom);
 	}

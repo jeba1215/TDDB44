@@ -189,6 +189,11 @@ ast_expression *ast_optimizer::fold_binop(ast_expression *node,
 ast_expression *ast_optimizer::fold_ast_const(ast_expression *node) {
 	symbol *temp_sym = sym_tab->get_symbol(node->get_ast_id()->sym_p);
 	if (temp_sym->tag == SYM_CONST) {
+		// We removed this part because it made us unable to complete the last lab.
+		// Replacing constants with numbers made our assembler not follow the tracefile.
+		// So to clarify this code works but we aren't using it :)
+		/*
+
 		if (node->type == integer_type) {
 			int val = temp_sym->get_constant_symbol()->const_value.ival;
 			return new ast_integer(node->pos, val);
@@ -196,6 +201,7 @@ ast_expression *ast_optimizer::fold_ast_const(ast_expression *node) {
 			double val = temp_sym->get_constant_symbol()->const_value.rval;
 			return new ast_real(node->pos, val);
 		}
+		*/
 	}
 	return node;
 }
