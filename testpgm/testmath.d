@@ -9,6 +9,7 @@ var
 begin
     x := read_real();
     write_real(sqrt(x));
+    write_real(x);
     newline();
 end.
     

@@ -530,7 +530,6 @@ sym_index ast_if::generate_quads(quad_list &q) {
 		this->else_body->generate_quads(q);
 	}
 
-	cout << "bottom" << endl;
 	q += new quadruple(q_labl, bottom, NULL_SYM, NULL_SYM);
 	return NULL_SYM;
 }

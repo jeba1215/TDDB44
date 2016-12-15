@@ -363,9 +363,10 @@ sym_index ast_assign::type_check() {
 }
 
 sym_index ast_while::type_check() {
-	if (condition->type_check() != integer_type) {
-		type_error(condition->pos) << "while predicate must be of integer "
-				<< "type.\n";
+	sym_index type = condition->type_check();
+	if (condition->type != integer_type) {
+		type_error(condition->pos) << "while predicate must be of type integer not " << type
+				<< " type.\n";
 	}
 
 	if (body != NULL) {

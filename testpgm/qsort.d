@@ -1,6 +1,6 @@
 program qsort;
 
-const SIZE = 20;
+const SIZE = 5;
 
 var s : array[SIZE] of integer;
 

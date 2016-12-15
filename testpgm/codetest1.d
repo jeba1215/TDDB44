@@ -5,14 +5,19 @@ const
     ASCII0 = 48;                { ascii value of '0' }
     MINUS = 45;
 var
-    c : integer;
+    
+    c : integer;    
     buf : array[10] of integer; { enough for 10 digits }
     bufp : integer;
+    
 begin
+    
     if (val = 0) then
         write(ASCII0);
         return;
     end;
+    
+    
     if (val < 0) then
         write(MINUS);
         val := -val;
@@ -24,10 +29,13 @@ begin
         bufp := bufp + 1;
         val := val div 10;
     end;
+    
+    
     while (bufp > 0) do
         bufp := bufp - 1;
         write(buf[bufp]);
     end;
+    
 end;
 
 begin

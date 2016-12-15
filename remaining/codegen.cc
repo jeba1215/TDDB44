@@ -195,7 +195,6 @@ void code_generator::fetch(sym_index sym_p, register_type dest)
 		out << "\t\t" << "mov" << "\t" << reg[dest] << ", [rcx" << offset << "]\n";
 		break;
 	case SYM_CONST:
-
 		out << "\t\t" << "mov" << "\t" << reg[dest] << ", " << sym->get_constant_symbol()->const_value.ival << "\n";
 		break;
 	case SYM_PARAM:
@@ -214,6 +213,17 @@ void code_generator::fetch_float(sym_index sym_p)
     /* Your code here */
 	// floats have to pass through memory, push to stack before pushing to the FPU
 	// remember to decrement the RSP
+	int level=0;
+	int offset=0;
+
+	find(sym_p, &level, &offset);
+	frame_address(level, RCX);
+	//out << "\t\t" << "fld" << "\t" << "[rcx" << offset << "]\n";
+	if(offset > 0){
+		out << "\t\t" << "fld" << "\t" << "qword ptr [" << reg[RCX] << "+" << offset << "]\n";
+	} else{
+		out << "\t\t" << "fld" << "\t" << "qword ptr [" << reg[RCX] << offset << "]\n";
+	}
 }
 
 
@@ -249,7 +259,13 @@ void code_generator::store(register_type src, sym_index sym_p)
 void code_generator::store_float(sym_index sym_p)
 {
 	debug("store float");
-    /* Your code here */
+	/* Your code here */
+	int offset = 0;
+	int level = 0;
+	find(sym_p, &level, &offset);
+	frame_address(level, RCX);
+	//out << "\t\t" << "fstp" << "\t[" << reg[RCX] << offset << "]" << "\n";
+	out << "\t\t" << "fstp" << "\t" << "qword ptr [" << reg[RCX] << offset << "]\n";
 }
 
 
@@ -632,20 +648,27 @@ void code_generator::expand(quad_list *q_list)
         	string name = "";
         	switch(sym->tag){
         	case SYM_PROC:
-        		size = sym->get_procedure_symbol()->last_parameter->size;
+        		size = 0;
+        		if(sym->get_procedure_symbol()->last_parameter != NULL)
+        			size = sym->get_procedure_symbol()->last_parameter->size;
+
         		name = sym_tab->pool_lookup(sym->get_procedure_symbol()->id);
         		out << "\t\t" << "call" << "\t" << "L" << sym->get_procedure_symbol()->label_nr << "\t# " << name << endl;
         		break;
         	case SYM_FUNC:
-        		size = sym->get_function_symbol()->last_parameter->size;
+        		size = 0;
+        		if(sym->get_function_symbol()->last_parameter != NULL)
+        			size = sym->get_function_symbol()->last_parameter->size;
+
         		name = sym_tab->pool_lookup(sym->get_function_symbol()->id);
         		out << "\t\t" << "call" << "\t" << "L" << sym->get_function_symbol()->label_nr << "\t# " << name << endl;
+        		store(RAX, q->sym3);
         		break;
         	default:
         		break;
         	}
 
-        	out << "\t\t" << "add" << "\t" << "rsp, " << size << endl;
+        	out << "\t\t" << "add" << "\t" << "rsp, " << STACK_WIDTH * q->int2 << endl;
             break;
         }
         case q_rreturn:

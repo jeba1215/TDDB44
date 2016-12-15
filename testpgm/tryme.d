@@ -4,10 +4,14 @@ program foo;
 { prints '!' : there is an array or parameter handling error }
 { prints 'X' or nothing : there is an elseif handling error }
 
+
+
 const ARSZ = 1000;
       blaz = 'idi';
 
 var woodchuck: array[ArSz] of real;
+
+#include "stdio.d"
 
 function half(bar : integer; gazonk : integer):integer;
 begin
@@ -28,6 +32,8 @@ begin
   return;
 end;
 
+
+
 function checkwood:integer;
 var z:integer;
 begin
@@ -46,8 +52,28 @@ begin
   return 0;
 end;
 
+function twok(a : integer; b : integer):integer;
+begin
+  return 1000;
+end;
+
+procedure checkarr;
+var z : integer;
+begin
+  z := 0;
+  while (z<48) do 
+    write_real(woodchuck[z]);
+    write(10);
+    z := z + 1;
+  end;
+end;
+
+
 begin
   chuckwood(half(ARSZ*2,2), zero(), 17);
+  //chuckwood(1000, 0, 17);
+  //chuckwood(twok(1, 2), zero(), 17);
+  //checkarr();
   if(not checkwood()) then
     write(33); { ! }
     write(10);
