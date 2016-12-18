@@ -5,6 +5,8 @@ PROGRAM Cirkel;
   VAR o : REAL; 
       r : REAL;
 
+#include "stdio.d"      
+
   PROCEDURE Init;
     BEGIN
       r := 17;
@@ -12,8 +14,9 @@ PROGRAM Cirkel;
 
   FUNCTION Omkrets(Radie : REAL) : REAL;
 
-    FUNCTION Diameter: REAL;
+    FUNCTION Diameter: REAL;    
       BEGIN
+      //write_real(RADIE);
 	RETURN 2 * Radie;
       END;
 
@@ -24,4 +27,5 @@ PROGRAM Cirkel;
 BEGIN
   Init();
   o := Omkrets(r);
+  write_real(o);
 END.

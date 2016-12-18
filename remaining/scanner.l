@@ -343,7 +343,7 @@ procedure                {
     yylloc.first_line = yylineno;
     yylloc.first_column = column;
     column += yyleng;
-    yylval.ival = atoi(yytext);
+    yylval.ival = std::stol(yytext);
     return T_INTNUM;
 }
 {REAL} {

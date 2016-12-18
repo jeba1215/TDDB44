@@ -218,11 +218,25 @@ void code_generator::fetch_float(sym_index sym_p)
 
 	find(sym_p, &level, &offset);
 	frame_address(level, RCX);
+	symbol* sym = sym_tab->get_symbol(sym_p);
 	//out << "\t\t" << "fld" << "\t" << "[rcx" << offset << "]\n";
-	if(offset > 0){
-		out << "\t\t" << "fld" << "\t" << "qword ptr [" << reg[RCX] << "+" << offset << "]\n";
-	} else{
-		out << "\t\t" << "fld" << "\t" << "qword ptr [" << reg[RCX] << offset << "]\n";
+
+	switch(sym->tag){
+		case SYM_PARAM:
+		case SYM_ARRAY:
+		case SYM_VAR:
+			if(offset > 0){
+				out << "\t\t" << "fld" << "\t" << "qword ptr [" << reg[RCX] << "+" << offset << "]\n";
+			} else{
+				out << "\t\t" << "fld" << "\t" << "qword ptr [" << reg[RCX] << offset << "]\n";
+			}
+			break;
+		case SYM_CONST:
+			out << "\t\t" << "mov" << "\t" << "rcx, " << sym_tab->ieee(sym->get_constant_symbol()->const_value.rval) << endl;
+			out << "\t\t" << "push" << "\t" << "rcx" << "\n";
+			out << "\t\t" << "fld" << "\t" << "qword ptr [" << "rsp" << "]\n";
+			out << "\t\t" << "add" << "\t" << "rsp, " << STACK_WIDTH << "\n";
+			break;
 	}
 }
 
